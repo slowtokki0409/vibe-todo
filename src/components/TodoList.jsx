@@ -214,10 +214,10 @@ export const TodoList = ({ todos, onToggle, onDelete, onUpdate, onEdit, filters,
           className="text-xs text-gray-500 pt-4 border-t border-white/10 text-center font-medium space-y-1"
         >
           <div>
-            {todos.filter((t) => !t.completed).length} of {todos.length} tasks remaining
+            남은 작업 {todos.filter((t) => !t.completed).length}개 / 전체 {todos.length}개
           </div>
           <div>
-            {todos.filter((t) => t.completed).length} tasks completed
+            완료된 작업 {todos.filter((t) => t.completed).length}개
           </div>
         </motion.div>
       )}

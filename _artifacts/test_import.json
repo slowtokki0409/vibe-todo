@@ -1,0 +1,13 @@
+{
+  "test": "Smart Paste Import (FEAT-IMPORT-001)",
+  "timestamp": "2026-01-16T14:46:28.663Z",
+  "passed": true,
+  "errors": [],
+  "artifacts": [
+    "import_01_initial.png",
+    "import_02_modal.png",
+    "import_03_pasted.png",
+    "import_04_result.png",
+    "import_05_final.png"
+  ]
+}

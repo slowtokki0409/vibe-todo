@@ -1,0 +1,232 @@
+{
+    "project_name": "AURA (Prev. Vibe Todo)",
+    "last_updated": "2026-01-16T22:45:00Z",
+    "version": "1.0.0",
+    "features": [
+        {
+            "id": "CORE-LAYOUT-001",
+            "title": "Glassmorphism Layout Structure",
+            "description": "Implement the main application layout with a centered glassmorphism card container, gradient background, and responsive padding.",
+            "category": "ui_ux",
+            "priority": "P0",
+            "user_story": {
+                "steps": [
+                    "Open the application",
+                    "Verify background has a dynamic gradient",
+                    "Verify the main container has a blur effect (backdrop-filter)"
+                ],
+                "expected_outcome": "The app appears centered with a premium glass-like container over a vibrant background."
+            },
+            "vibe_check": {
+                "has_animation": false,
+                "aesthetic_notes": "Background: Gradient from Indigo-500 to Purple-600. Card: bg-white/10 backdrop-blur-lg border-white/20."
+            },
+            "technical_context": {
+                "files_involved": [
+                    "src/components/Layout.jsx",
+                    "src/App.jsx",
+                    "src/index.css"
+                ]
+            },
+            "status": {
+                "completed": true,
+                "passed_test": true,
+                "last_verified": "2026-01-14T00:00:00Z"
+            }
+        },
+        {
+            "id": "CORE-INPUT-001",
+            "title": "Todo Input with Glow Effect",
+            "description": "A text input field for creating new tasks. Must glow when focused and support 'Enter' key submission.",
+            "category": "ui_ux",
+            "priority": "P0",
+            "user_story": {
+                "steps": [
+                    "Click on the input field",
+                    "Type 'Buy Milk'",
+                    "Press Enter"
+                ],
+                "expected_outcome": "The input glows on focus. Upon 'Enter', the input clears and the task appears in the list."
+            },
+            "vibe_check": {
+                "has_animation": true,
+                "aesthetic_notes": "Focus ring should be a soft purple glow (ring-purple-500/50). Clear transition on submit."
+            },
+            "technical_context": {
+                "files_involved": [
+                    "src/components/TodoInput.jsx"
+                ],
+                "test_file": "tests/input.spec.js"
+            },
+            "status": {
+                "completed": true,
+                "passed_test": true
+            }
+        },
+        {
+            "id": "CORE-LIST-001",
+            "title": "Animated Todo List Rendering",
+            "description": "Render the list of todo items. Each item must animate in (slide-down + fade-in) when added.",
+            "category": "animation",
+            "priority": "P0",
+            "dependencies": [
+                "CORE-INPUT-001"
+            ],
+            "user_story": {
+                "steps": [
+                    "Add a new task",
+                    "Observe the list"
+                ],
+                "expected_outcome": "New item slides down gracefully. AnimatePresence should be used for exit animations."
+            },
+            "vibe_check": {
+                "has_animation": true,
+                "aesthetic_notes": "Use Framer Motion AnimatePresence. Duration: 0.3s, Ease: easeOut."
+            },
+            "technical_context": {
+                "files_involved": [
+                    "src/components/TodoList.jsx",
+                    "src/App.jsx"
+                ]
+            },
+            "status": {
+                "completed": true,
+                "passed_test": true
+            }
+        },
+        {
+            "id": "FEAT-FILTER-001",
+            "title": "Status Filter Tabs",
+            "description": "Tabs to filter todos by All, Active, Completed. The active tab should have a sliding pill background.",
+            "category": "ui_ux",
+            "priority": "P1",
+            "user_story": {
+                "steps": [
+                    "Click 'Completed' filter",
+                    "Verify only completed items are shown"
+                ],
+                "expected_outcome": "List updates instantly. The active pill background slides to the clicked tab."
+            },
+            "vibe_check": {
+                "has_animation": true,
+                "aesthetic_notes": "LayoutId animation for the active tab background (Framer Motion)."
+            },
+            "technical_context": {
+                "files_involved": [
+                    "src/components/TodoFilter.jsx"
+                ]
+            },
+            "status": {
+                "completed": true,
+                "passed_test": true
+            }
+        },
+        {
+            "id": "FEAT-EDIT-001",
+            "title": "Edit Task Modal",
+            "description": "Clicking an item opens a modal to edit text. The modal should pop in with a spring animation.",
+            "category": "ui_ux",
+            "priority": "P1",
+            "user_story": {
+                "steps": [
+                    "Click 'Edit' on a task",
+                    "Change text in modal",
+                    "Save"
+                ],
+                "expected_outcome": "Modal appears with backdrop. Saving updates the list item immediately."
+            },
+            "vibe_check": {
+                "has_animation": true,
+                "aesthetic_notes": "Modal: Scale up (0.9 -> 1.0) and Fade In. Backdrop: Blur-sm."
+            },
+            "technical_context": {
+                "files_involved": [
+                    "src/components/TodoEditModal.jsx"
+                ]
+            },
+            "status": {
+                "completed": true,
+                "passed_test": true,
+                "last_verified": "2026-01-16T14:33:42Z"
+            }
+        },
+        {
+            "id": "FEAT-RECUR-001",
+            "title": "Recurring Task Logic",
+            "description": "Allow tasks to be set as recurring (Daily, Weekly). Completing them should spawn the next instance.",
+            "category": "core_logic",
+            "priority": "P2",
+            "user_story": {
+                "steps": [
+                    "Create task 'Meeting'",
+                    "Set recurrence to 'Daily'",
+                    "Complete the task"
+                ],
+                "expected_outcome": "Current task marked done. A new task 'Meeting' created with tomorrow's date."
+            },
+            "vibe_check": {
+                "has_animation": true,
+                "aesthetic_notes": "Recurrence icon should pulse briefly when the next task is spawned."
+            },
+            "technical_context": {
+                "files_involved": [
+                    "src/components/TodoRecurring.jsx",
+                    "src/hooks/useTodos.js"
+                ],
+                "test_file": "tests/recurring.spec.js"
+            },
+            "status": {
+                "completed": true,
+                "passed_test": true,
+                "last_verified": "2026-01-16T14:45:00Z"
+            }
+        },
+        {
+            "id": "FEAT-IMPORT-001",
+            "title": "Smart Paste Import",
+            "description": "Allow users to paste a list of text features and auto-convert them into multiple todo items.",
+            "category": "core_logic",
+            "priority": "P2",
+            "user_story": {
+                "steps": [
+                    "Copy 5 lines of text",
+                    "Press Import button",
+                    "Paste text"
+                ],
+                "expected_outcome": "5 separate todo items are created."
+            },
+            "technical_context": {
+                "files_involved": [
+                    "src/components/PasteImportModal.jsx"
+                ]
+            },
+            "status": {
+                "completed": true,
+                "passed_test": true,
+                "last_verified": "2026-01-16T14:50:00Z"
+            }
+        },
+        {
+            "id": "VISUAL-POLISH-001",
+            "title": "Global Gradient Polish",
+            "description": "Refine the global background mesh gradient to be more subtle and breathing.",
+            "category": "ui_ux",
+            "priority": "P3",
+            "user_story": {
+                "steps": [
+                    "Observe background for 10 seconds"
+                ],
+                "expected_outcome": "Background colors shift slowly (breathing effect)."
+            },
+            "vibe_check": {
+                "has_animation": true,
+                "aesthetic_notes": "CSS Keyframes for background-position."
+            },
+            "status": {
+                "completed": true,
+                "passed_test": true,
+                "last_verified": "2026-01-16T14:55:00Z"
+            }
+        }
+    ]
+}

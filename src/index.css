@@ -37,3 +37,69 @@ body {
     animation-delay: 4s;
   }
 }
+
+/* VISUAL-POLISH-001: Breathing Gradient Animation */
+@keyframes breathe {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(30px, -30px) scale(1.1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(0.95);
+    opacity: 0.35;
+  }
+  75% {
+    transform: translate(20px, 10px) scale(1.05);
+    opacity: 0.45;
+  }
+}
+
+@keyframes breathe-reverse {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(-20px, 20px) scale(1.05);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(30px, -10px) scale(1.1);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(-30px, 30px) scale(0.95);
+    opacity: 0.45;
+  }
+}
+
+@keyframes breathe-slow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  33% {
+    transform: translate(40px, 20px) scale(1.15);
+    opacity: 0.3;
+  }
+  66% {
+    transform: translate(-30px, -20px) scale(0.9);
+    opacity: 0.25;
+  }
+}
+
+.animate-breathe {
+  animation: breathe 8s ease-in-out infinite;
+}
+
+.animate-breathe-reverse {
+  animation: breathe-reverse 10s ease-in-out infinite;
+}
+
+.animate-breathe-slow {
+  animation: breathe-slow 12s ease-in-out infinite;
+}

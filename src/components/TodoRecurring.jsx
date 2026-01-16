@@ -54,35 +54,46 @@ export const TodoRecurring = ({ todo, onUpdate }) => {
       <div className="relative">
         {showOptions && (
           <motion.div
-            className="absolute right-0 mt-8 bg-slate-900 border border-white/20 rounded-lg shadow-lg p-2 z-50 space-y-1 min-w-max"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+            className="absolute right-0 mt-2 bg-slate-900/90 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl p-3 z-50 space-y-2 min-w-[140px]"
+            initial={{ opacity: 0, scale: 0.8, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -10 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            <button
+            <div className="text-xs font-semibold text-gray-400 mb-2 px-2">반복 주기 설정</div>
+            <motion.button
               onClick={() => handleRecurringChange('daily')}
-              className="w-full px-3 py-1 text-left text-sm hover:bg-white/10 rounded transition-colors"
+              className="w-full px-3 py-2 text-left text-sm hover:bg-cyan-500/20 hover:text-cyan-400 rounded-lg transition-all duration-200 font-medium"
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.95 }}
             >
-              매일
-            </button>
-            <button
+              📅 매일
+            </motion.button>
+            <motion.button
               onClick={() => handleRecurringChange('weekly')}
-              className="w-full px-3 py-1 text-left text-sm hover:bg-white/10 rounded transition-colors"
+              className="w-full px-3 py-2 text-left text-sm hover:bg-cyan-500/20 hover:text-cyan-400 rounded-lg transition-all duration-200 font-medium"
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.95 }}
             >
-              매주
-            </button>
-            <button
+              📆 매주
+            </motion.button>
+            <motion.button
               onClick={() => handleRecurringChange('monthly')}
-              className="w-full px-3 py-1 text-left text-sm hover:bg-white/10 rounded transition-colors"
+              className="w-full px-3 py-2 text-left text-sm hover:bg-cyan-500/20 hover:text-cyan-400 rounded-lg transition-all duration-200 font-medium"
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.95 }}
             >
-              매월
-            </button>
-            <div className="border-t border-white/10 my-1" />
-            <button
+              🗓️ 매월
+            </motion.button>
+            <div className="border-t border-white/10 my-2" />
+            <motion.button
               onClick={() => handleRecurringChange(null)}
-              className="w-full px-3 py-1 text-left text-sm hover:bg-white/10 rounded transition-colors text-red-400"
+              className="w-full px-3 py-2 text-left text-sm hover:bg-red-500/20 hover:text-red-400 rounded-lg transition-all duration-200 font-medium"
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.95 }}
             >
-              반복 안 함
-            </button>
+              ❌ 반복 안 함
+            </motion.button>
           </motion.div>
         )}
 

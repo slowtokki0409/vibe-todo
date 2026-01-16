@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2, CheckCircle2, Circle, AlertCircle } from 'lucide-react';
+import { Trash2, CheckCircle2, Circle, AlertCircle, Inbox } from 'lucide-react';
 import TodoFilter from './TodoFilter';
 import TodoRecurring from './TodoRecurring';
+import { isOverdue, isToday, isUrgent, formatDateWithDDay, getDateBadgeColor } from '../utils/dateUtils';
 
 export const TodoList = ({ todos, onToggle, onDelete, onUpdate, onEdit, filters, onFilterChange }) => {
+  // Smart Sorting Logic
+  const sortedTodos = useMemo(() => {
+    return [...todos].sort((a, b) => {
+      // 1. Completion Status: Active first, Completed last
+      if (a.completed !== b.completed) return a.completed ? 1 : -1;
+
+      // 2. Priority: High > Medium > Low
+      const priorityScore = { high: 3, medium: 2, low: 1 };
+      const scoreA = priorityScore[a.priority] || 1;
+      const scoreB = priorityScore[b.priority] || 1;
+      if (scoreA !== scoreB) return scoreB - scoreA;
+
+      // 3. Due Date: Electronic (Earliest first), No Date last
+      if (a.dueDate && b.dueDate) return new Date(a.dueDate) - new Date(b.dueDate);
+      if (a.dueDate && !b.dueDate) return -1;
+      if (!a.dueDate && b.dueDate) return 1;
+
+      // 4. Creation Date: Newest first (ID is timestamp)
+      return b.id - a.id;
+    });
+  }, [todos]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -50,30 +73,6 @@ export const TodoList = ({ todos, onToggle, onDelete, onUpdate, onEdit, filters,
     study: '학습',
   };
 
-  const isOverdue = (dueDate) => {
-    if (!dueDate) return false;
-    return new Date(dueDate) < new Date() && new Date(dueDate).toDateString() !== new Date().toDateString();
-  };
-
-  const isToday = (dueDate) => {
-    if (!dueDate) return false;
-    return new Date(dueDate).toDateString() === new Date().toDateString();
-  };
-
-  const isUpcoming = (dueDate) => {
-    if (!dueDate) return false;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const date = new Date(dueDate);
-    date.setHours(0, 0, 0, 0);
-    return date > today && date <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-  };
-
-  const formatDate = (dueDate) => {
-    if (!dueDate) return null;
-    const date = new Date(dueDate);
-    return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
-  };
 
   return (
     <motion.div className="w-full space-y-4">
@@ -94,12 +93,25 @@ export const TodoList = ({ todos, onToggle, onDelete, onUpdate, onEdit, filters,
               variants={itemVariants}
               className="text-center py-12 text-gray-500"
             >
+              <motion.div
+                animate={{
+                  y: [0, -10, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              >
+                <Inbox className="w-16 h-16 mx-auto mb-4 text-gray-600" />
+              </motion.div>
               <p className="text-lg">할 일이 없습니다.</p>
               <p className="text-sm mt-2">새로운 목표를 추가하고 하루를 시작해보세요!</p>
             </motion.div>
           ) : (
-            todos.map((todo) => (
+            sortedTodos.map((todo) => (
               <motion.div
+                layout
                 key={todo.id}
                 variants={itemVariants}
                 className="group flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer"
@@ -128,9 +140,8 @@ export const TodoList = ({ todos, onToggle, onDelete, onUpdate, onEdit, filters,
                 <div className="flex-1 min-w-0 space-y-1">
                   {/* Todo Text */}
                   <motion.p
-                    className={`text-base tracking-tight font-medium truncate ${
-                      todo.completed ? 'text-gray-500 line-through' : 'text-white'
-                    }`}
+                    className={`text-base tracking-tight font-medium truncate ${todo.completed ? 'text-gray-500 line-through' : 'text-white'
+                      }`}
                     animate={{
                       color: todo.completed ? '#6b7280' : '#ffffff',
                       textDecoration: todo.completed ? 'line-through' : 'none',
@@ -144,41 +155,36 @@ export const TodoList = ({ todos, onToggle, onDelete, onUpdate, onEdit, filters,
                   <div className="flex flex-wrap gap-2 items-center">
                     {/* Priority Badge */}
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                        priorityColors[todo.priority || 'medium']
-                      }`}
+                      className={`text-xs px-2 py-0.5 rounded-full font-medium ${priorityColors[todo.priority || 'medium']
+                        }`}
                     >
                       {todo.priority === 'high'
                         ? '높음'
                         : todo.priority === 'low'
-                        ? '낮음'
-                        : '중간'}
+                          ? '낮음'
+                          : '중간'}
                     </span>
 
                     {/* Category Badge */}
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                        categoryColors[todo.category || 'personal']
-                      }`}
+                      className={`text-xs px-2 py-0.5 rounded-full font-medium ${categoryColors[todo.category || 'personal']
+                        }`}
                     >
                       {categoryLabels[todo.category || 'personal']}
                     </span>
 
-                    {/* Due Date Badge */}
+                    {/* Due Date Badge with D-Day */}
                     {todo.dueDate && (
                       <motion.span
-                        className={`text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${
-                          isOverdue(todo.dueDate)
-                            ? 'bg-red-500/20 text-red-400'
-                            : isToday(todo.dueDate)
-                            ? 'bg-orange-500/20 text-orange-400'
-                            : isUpcoming(todo.dueDate)
-                            ? 'bg-blue-500/20 text-blue-400'
-                            : 'bg-gray-500/20 text-gray-400'
-                        }`}
+                        className={`text-xs px-2 py-1 rounded-full font-medium flex items-center gap-1 ${getDateBadgeColor(
+                          todo.dueDate
+                        )}`}
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                       >
-                        {isOverdue(todo.dueDate) && <AlertCircle size={12} />}
-                        {formatDate(todo.dueDate)}
+                        {(isOverdue(todo.dueDate) || isUrgent(todo.dueDate)) && <AlertCircle size={12} />}
+                        {formatDateWithDDay(todo.dueDate)}
                       </motion.span>
                     )}
 

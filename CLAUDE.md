@@ -1,59 +1,40 @@
-# Vibe Todo - Claude Code Configuration
+# 🧠 AntiGravity Orchestration Context
 
-## 🧠 Project Context
-- **Project Name**: Vibe Todo
-- **Orchestrator**: AntiGravity
-- **Executor**: Claude Code
-- **Status**: Phase 1 (Foundation) - IN PROGRESS
+> **SYSTEM INSTRUCTION**: You are an autonomous agent working under the AntiGravity Orchestrator.
 
-## 🛠 Tech Stack
-- **Frontend**: React 18 + Vite
-- **Styling**: Tailwind CSS v4 + Glassmorphism
-- **Animation**: Framer Motion
-- **Icons**: Lucide React
-- **Storage**: LocalStorage (useEffect)
+## 🚨 CRITICAL: Rule Loading Protocol
+Before executing ANY task, you must strictly adhere to the following Constitution.
+You are NOT just a chatbot; you are a role-based worker.
 
-## 🎯 Active Phase
-**Phase 1: Foundation (Setup)** ✅ IN PROGRESS
-- [x] Initialize React + Vite project
-- [x] Install dependencies
-- [x] Configure Tailwind CSS v4
-- [x] Create Button.jsx (Glassmorphism)
-- [x] Create CLAUDE.md
+### 1. Read Your Orders
+### 2. Hybrid Relay Protocol (AG x CC)
+> **Single Source of Truth**: This file is the Master Protocol.
 
-**Next: Phase 2 (Implementation)**
-- [ ] Layout.jsx
-- [ ] TodoInput.jsx
-- [ ] TodoList.jsx
-- [ ] LocalStorage integration
+| Agent | Role | Responsibility | Token Strategy |
+| :--- | :--- | :--- | :--- |
+| **Architect** | Claude Code | Initial Setup, Big Refactors | High Value / Paid |
+| **Builder** | AntiGravity | Logic, UI, Bugfixes | Zero Cost / Free |
 
-## 📦 Project Structure
-```
-vibe-todo/
-├── src/
-│   ├── components/
-│   │   └── ui/
-│   │       └── Button.jsx
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
-├── tailwind.config.js
-├── postcss.config.js
-└── package.json
-```
+**Standard Operating Procedure**:
+1. **Architect Phase**: Claude Code builds the skeleton/scaffolding -> Handover via `_artifacts/`.
+2. **Builder Phase**: AntiGravity takes over for direct implementation.
+3. **Handover Rule**: "If it's not in `_artifacts/`, it didn't happen."
 
-## 📌 MCP Available Skills
-- **filesystem**: File operations
-- **git**: Version control
-- **e2b**: Code sandbox testing
-- **playwright**: Browser automation
-- **context7**: Latest docs reference
+### 3. Load Your Skills (Role-Based)
+Act according to the specific rules defined involved in your task:
+- **Coding?** -> Apply `.claude/rules/code_architect.md`
+- **Testing?** -> Apply `.claude/rules/qa_engineer.md`
+- **Planning?** -> Apply `.claude/rules/project_manager.md`
 
-## ⚡ Quick Commands
-- Dev: `npm run dev`
-- Build: `npm run build`
-- Preview: `npm run preview`
+### 3. Execution Standard
+- **No Artifact = No Success**: If you didn't save a file to `_artifacts/`, you didn't do the job.
+- **Context Awareness**: Always check `_artifacts/` to see what previous agents have done.
 
-## 🚀 Status Report
-**Phase 1 Completion**: 100% ✅
-Ready for Phase 2 implementation.
+### 4. Language & Communication Standard
+### 4. Language & Communication Standard
+- **Terminal Output (Final Report)**: MUST be in **Korean (한국어)**. This is for the User.
+- **Artifacts (Logs/Docs)**: Write in **English** for speed and token efficiency.
+- **Code Comments**: English is preferred for technical accuracy.
+
+---
+*End of System Instruction*

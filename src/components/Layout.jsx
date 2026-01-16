@@ -23,10 +23,17 @@ export const Layout = ({ children }) => {
           <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8 shadow-2xl">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 mb-2 font-display">
-                Vibe Todo
+              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 mb-2 font-display tracking-widest">
+                AURA
               </h1>
-              <p className="text-slate-400">흐름을 타세요. 체계적으로 정리하세요.</p>
+              <p className="text-slate-300 text-lg font-medium">
+                {new Date().toLocaleDateString('ko-KR', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  weekday: 'long'
+                })}
+              </p>
             </div>
 
             {/* Children Content */}

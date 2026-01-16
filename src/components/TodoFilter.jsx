@@ -27,30 +27,30 @@ export const TodoFilter = ({ filters, onFilterChange }) => {
       className="space-y-3 py-4 border-b border-white/10"
     >
       {/* Search Bar */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+      <div className="relative group text-left">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors z-10 pointer-events-none" />
         <input
           type="text"
           placeholder="할 일 검색..."
           value={filters.search}
           onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
-          className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-purple-500/50"
+          className="w-full text-left py-4 rounded-2xl bg-black/20 backdrop-blur-sm border border-white/10 text-white text-base placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:bg-black/30 transition-all font-medium shadow-inner"
+          style={{ paddingLeft: '3.8rem', paddingRight: '1rem' }}
         />
       </div>
 
       {/* Filter Buttons */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3">
         {/* Status Filter */}
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           {['all', 'active', 'completed'].map((status) => (
             <motion.button
               key={status}
               onClick={() => onFilterChange({ ...filters, status })}
-              className={`px-2 py-1 rounded text-xs font-medium transition-all ${
-                filters.status === status
-                  ? 'bg-purple-500/30 border border-purple-500/50 text-purple-300'
-                  : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white'
-              }`}
+              className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${filters.status === status
+                  ? 'bg-purple-500/30 border border-purple-500/50 text-purple-200 shadow-custom'
+                  : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10'
+                }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -60,16 +60,15 @@ export const TodoFilter = ({ filters, onFilterChange }) => {
         </div>
 
         {/* Category Filter */}
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           {['all', 'work', 'personal', 'study'].map((cat) => (
             <motion.button
               key={cat}
               onClick={() => onFilterChange({ ...filters, category: cat })}
-              className={`px-2 py-1 rounded text-xs font-medium transition-all ${
-                filters.category === cat
-                  ? 'bg-blue-500/30 border border-blue-500/50 text-blue-300'
-                  : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white'
-              }`}
+              className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${filters.category === cat
+                  ? 'bg-blue-500/30 border border-blue-500/50 text-blue-200 shadow-custom'
+                  : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10'
+                }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -79,16 +78,15 @@ export const TodoFilter = ({ filters, onFilterChange }) => {
         </div>
 
         {/* Priority Filter */}
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           {['all', 'high', 'medium', 'low'].map((pri) => (
             <motion.button
               key={pri}
               onClick={() => onFilterChange({ ...filters, priority: pri })}
-              className={`px-2 py-1 rounded text-xs font-medium transition-all ${
-                filters.priority === pri
-                  ? 'bg-red-500/30 border border-red-500/50 text-red-300'
-                  : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white'
-              }`}
+              className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${filters.priority === pri
+                  ? 'bg-red-500/30 border border-red-500/50 text-red-200 shadow-custom'
+                  : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10'
+                }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -101,7 +99,7 @@ export const TodoFilter = ({ filters, onFilterChange }) => {
         <select
           value={filters.sortBy}
           onChange={(e) => onFilterChange({ ...filters, sortBy: e.target.value })}
-          className="px-2 py-1 rounded text-xs font-medium bg-white/5 border border-white/10 text-gray-400 focus:outline-none focus:border-purple-500/50"
+          className="px-4 py-2.5 rounded-xl text-sm font-medium bg-white/5 border border-white/10 text-gray-300 focus:outline-none focus:border-purple-500/50 hover:bg-white/10 transition-colors"
         >
           <option value="priority">우선순위순</option>
           <option value="dueDate">마감일순</option>
@@ -112,11 +110,11 @@ export const TodoFilter = ({ filters, onFilterChange }) => {
         {hasActiveFilters && (
           <motion.button
             onClick={handleClearFilters}
-            className="ml-auto px-2 py-1 rounded text-xs font-medium bg-red-500/20 border border-red-500/50 text-red-300 hover:bg-red-500/30 flex items-center gap-1"
+            className="ml-auto px-4 py-2.5 rounded-xl text-sm font-medium bg-red-500/20 border border-red-500/50 text-red-300 hover:bg-red-500/30 flex items-center gap-2"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <X size={12} />
+            <X size={14} />
             필터 초기화
           </motion.button>
         )}

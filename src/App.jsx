@@ -5,9 +5,36 @@ import TodoList from './components/TodoList';
 import TodoEditModal from './components/TodoEditModal';
 import TodoStats from './components/TodoStats';
 import ActionBar from './components/ActionBar';
-import { exportToCSV, exportToJSON, importFromJSON } from './utils/export';
-import { requestNotificationPermission, checkUpcomingDeadlines, checkOverdueTodos } from './utils/notifications';
+import NotificationBanner from './components/NotificationBanner';
+import { exportToCSV, exportToJSON, exportToMarkdown, importFromFile, importFromText } from './utils/export';
+import { requestNotificationPermission, checkUpcomingDeadlines, checkOverdueTodos, checkOneHourAdvance, cleanupOldNotificationFlags } from './utils/notifications';
 import './App.css';
+
+/**
+ * Calculate the next due date based on recurring type
+ * @param {string} currentDueDate - Current due date (ISO string or YYYY-MM-DD)
+ * @param {string} recurringType - 'daily', 'weekly', or 'monthly'
+ * @returns {string} - Next due date in YYYY-MM-DD format
+ */
+const calculateNextDueDate = (currentDueDate, recurringType) => {
+  const baseDate = currentDueDate ? new Date(currentDueDate) : new Date();
+
+  switch (recurringType) {
+    case 'daily':
+      baseDate.setDate(baseDate.getDate() + 1);
+      break;
+    case 'weekly':
+      baseDate.setDate(baseDate.getDate() + 7);
+      break;
+    case 'monthly':
+      baseDate.setMonth(baseDate.getMonth() + 1);
+      break;
+    default:
+      break;
+  }
+
+  return baseDate.toISOString().split('T')[0];
+};
 
 function App() {
   const [todos, setTodos] = useState(() => {
@@ -72,9 +99,11 @@ function App() {
   // Request notification permission and set up reminder checks
   useEffect(() => {
     requestNotificationPermission();
+    cleanupOldNotificationFlags();
 
     // Check reminders every minute
     const interval = setInterval(() => {
+      checkOneHourAdvance(todos);
       checkUpcomingDeadlines(todos);
       checkOverdueTodos(todos);
     }, 60000); // 1분마다 체크
@@ -99,11 +128,38 @@ function App() {
   };
 
   const toggleTodo = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+    const todoToToggle = todos.find((t) => t.id === id);
+    if (!todoToToggle) return;
+
+    // If marking as completed and is recurring
+    if (!todoToToggle.completed && todoToToggle.recurring?.enabled) {
+      const nextDueDate = calculateNextDueDate(
+        todoToToggle.dueDate,
+        todoToToggle.recurring.type
+      );
+
+      const newRecurringTodo = {
+        ...todoToToggle,
+        id: Date.now(),
+        completed: false,
+        dueDate: nextDueDate,
+        createdAt: new Date().toISOString(),
+        // Keep other properties safely
+      };
+
+      setTodos((prev) => {
+        const updatedPrevious = prev.map((t) =>
+          t.id === id ? { ...t, completed: true } : t
+        );
+        return [newRecurringTodo, ...updatedPrevious];
+      });
+    } else {
+      setTodos(
+        todos.map((todo) =>
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        )
+      );
+    }
   };
 
   const deleteTodo = (id) => {
@@ -178,9 +234,13 @@ function App() {
     exportToJSON(todos);
   };
 
-  const handleImportJSON = async (file) => {
+  const handleExportMD = () => {
+    exportToMarkdown(todos);
+  };
+
+  const handleImportFile = async (file) => {
     try {
-      const importedTodos = await importFromJSON(file);
+      const importedTodos = await importFromFile(file);
       setTodos((prevTodos) => [...prevTodos, ...importedTodos]);
       alert(`${importedTodos.length}개의 할일이 임포트되었습니다.`);
     } catch (error) {
@@ -188,10 +248,27 @@ function App() {
     }
   };
 
+  const handleImportText = async (text) => {
+    try {
+      const importedTodos = await importFromText(text);
+      setTodos((prevTodos) => [...prevTodos, ...importedTodos]);
+      alert(`${importedTodos.length}개의 할일이 추가되었습니다.`);
+    } catch (error) {
+      alert(`추가 실패: ${error.message}`);
+    }
+  };
+
   return (
     <Layout>
+      <NotificationBanner />
       <TodoInput onAdd={addTodo} />
-      <ActionBar onExportCSV={handleExportCSV} onExportJSON={handleExportJSON} onImportJSON={handleImportJSON} />
+      <ActionBar
+        onExportCSV={handleExportCSV}
+        onExportJSON={handleExportJSON}
+        onExportMD={handleExportMD}
+        onImportFile={handleImportFile}
+        onImportText={handleImportText}
+      />
       <TodoStats todos={todos} />
       <TodoList
         todos={filteredTodos}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Send, Sparkles, Loader2, ChevronDown } from 'lucide-react';
 import { enhanceTask } from '../services/perplexity';
+import TodoRecurring from './TodoRecurring';
 
 export const TodoInput = ({ onAdd }) => {
   const [input, setInput] = useState('');
@@ -12,15 +13,19 @@ export const TodoInput = ({ onAdd }) => {
   const [priority, setPriority] = useState('medium');
   const [category, setCategory] = useState('personal');
   const [dueDate, setDueDate] = useState('');
+  const [recurring, setRecurring] = useState(null);
+  const [reminderEnabled, setReminderEnabled] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (input.trim()) {
-      onAdd(input, priority, category, dueDate || null);
+      onAdd(input, priority, category, dueDate || null, '', recurring, reminderEnabled);
       setInput('');
       setPriority('medium');
       setCategory('personal');
       setDueDate('');
+      setRecurring(null);
+      setReminderEnabled(false);
       setShowMagic(false);
       setShowAdvanced(false);
     }
@@ -167,11 +172,10 @@ export const TodoInput = ({ onAdd }) => {
                     key={p}
                     type="button"
                     onClick={() => setPriority(p)}
-                    className={`px-3 py-1 rounded-lg border text-sm font-medium transition-all ${
-                      priority === p
+                    className={`px-3 py-1 rounded-lg border text-sm font-medium transition-all ${priority === p
                         ? priorityColors[p]
                         : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
-                    }`}
+                      }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -190,11 +194,10 @@ export const TodoInput = ({ onAdd }) => {
                     key={c}
                     type="button"
                     onClick={() => setCategory(c)}
-                    className={`px-3 py-1 rounded-lg border text-sm font-medium transition-all ${
-                      category === c
+                    className={`px-3 py-1 rounded-lg border text-sm font-medium transition-all ${category === c
                         ? categoryColors[c]
                         : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
-                    }`}
+                      }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -213,9 +216,8 @@ export const TodoInput = ({ onAdd }) => {
                     key={option.label}
                     type="button"
                     onClick={() => handleQuickDate(option.days)}
-                    className={`px-3 py-1 rounded-lg border text-sm font-medium transition-all ${
-                      'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`px-3 py-1 rounded-lg border text-sm font-medium transition-all ${'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
+                      }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -229,6 +231,20 @@ export const TodoInput = ({ onAdd }) => {
                 onChange={(e) => setDueDate(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-purple-500/50"
               />
+            </div>
+
+            {/* Recurring & Reminder */}
+            <div>
+              <label className="text-xs text-gray-400 font-semibold mb-2 block">반복 및 알림</label>
+              <div className="relative">
+                <TodoRecurring
+                  todo={{ recurring, reminderEnabled }}
+                  onUpdate={(_, updates) => {
+                    if (updates.recurring !== undefined) setRecurring(updates.recurring);
+                    if (updates.reminderEnabled !== undefined) setReminderEnabled(updates.reminderEnabled);
+                  }}
+                />
+              </div>
             </div>
           </motion.div>
         )}

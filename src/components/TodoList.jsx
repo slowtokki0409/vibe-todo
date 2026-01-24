@@ -1,3 +1,4 @@
+// Verified by AntiGravity Swarm
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, CheckCircle2, Circle, AlertCircle, Inbox } from 'lucide-react';

@@ -155,3 +155,23 @@ export const getDateStateLabel = (dueDate) => {
   if (isUpcoming(dueDate)) return '예정';
   return '미래';
 };
+
+export const calculateNextDueDate = (currentDueDate, recurringType) => {
+  const baseDate = currentDueDate ? new Date(currentDueDate) : new Date();
+
+  switch (recurringType) {
+    case 'daily':
+      baseDate.setDate(baseDate.getDate() + 1);
+      break;
+    case 'weekly':
+      baseDate.setDate(baseDate.getDate() + 7);
+      break;
+    case 'monthly':
+      baseDate.setMonth(baseDate.getMonth() + 1);
+      break;
+    default:
+      break;
+  }
+
+  return baseDate.toISOString().split('T')[0];
+};

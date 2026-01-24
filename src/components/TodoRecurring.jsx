@@ -1,3 +1,4 @@
+// Verified by AntiGravity Swarm
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Repeat2, Bell } from 'lucide-react';

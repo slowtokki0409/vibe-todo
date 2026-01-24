@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Skill(webapp-testing)",
+      "Bash(curl:*)",
+      "Bash(node tests/edit_modal.spec.mjs:*)",
+      "Bash(pkill:*)",
+      "Bash(npm run dev:*)",
+      "Bash(node:*)"
+    ]
+  }
+}

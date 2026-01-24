@@ -175,14 +175,14 @@ export const importFromFile = (file) => {
         }
 
         reject(new Error('지원하지 않는 파일 형식입니다. (.json, .txt, .md)'));
-      } catch (error) {
-        // JSON 파싱 실패 시 텍스트로 처리 시도 (옵션)
+       } catch {
+         // JSON 파싱 실패 시 텍스트로 처리 시도 (옵션)
         try {
-          const todos = parseTextToTodos(content);
-          resolve(todos);
-        } catch (err) {
-          reject(new Error('파일 읽기 실패'));
-        }
+           const todos = parseTextToTodos(content);
+           resolve(todos);
+         } catch {
+           reject(new Error('파일 읽기 실패'));
+         }
       }
     };
 

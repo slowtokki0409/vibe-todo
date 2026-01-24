@@ -49,8 +49,6 @@ const markNotificationSent = (todoId, type) => {
 export const checkOneHourAdvance = (todos) => {
   const now = new Date();
 
-  const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
-
   const urgentTodos = todos.filter((todo) => {
     if (!todo.dueDate || todo.completed || !todo.reminderEnabled) return false;
     if (wasNotificationSent(todo.id, 'one-hour')) return false;

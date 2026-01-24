@@ -1,3 +1,4 @@
+// Verified by AntiGravity Swarm
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, Clock, AlertCircle, Zap } from 'lucide-react';

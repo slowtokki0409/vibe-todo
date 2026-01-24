@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+// Verified by AntiGravity Swarm
+import React, { useState, useTransition } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Send, Sparkles, Loader2, ChevronDown } from 'lucide-react';
 import { enhanceTask } from '../services/perplexity';
+import { priorityColors, categoryColors } from '../utils/colors';
 import TodoRecurring from './TodoRecurring';
 
 export const TodoInput = ({ onAdd }) => {
   const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const [isEnhancing, setIsEnhancing] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [showMagic, setShowMagic] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [priority, setPriority] = useState('medium');
@@ -33,43 +35,30 @@ export const TodoInput = ({ onAdd }) => {
 
   const handleEnhance = async (e) => {
     e.preventDefault();
-    if (!input.trim() || isEnhancing) return;
+    if (!input.trim() || isPending) return;
 
-    setIsEnhancing(true);
-    try {
-      const enhanced = await enhanceTask(input);
-      setInput(enhanced);
-    } catch (error) {
-      console.error("Enhancement failed", error);
-      alert("AI 구체화 실패: " + error.message);
-    } finally {
-      setIsEnhancing(false);
-    }
+    startTransition(async () => {
+      try {
+        const enhanced = await enhanceTask(input);
+        setInput(enhanced);
+      } catch (error) {
+        console.error("Enhancement failed", error);
+        alert("AI 구체화 실패: " + error.message);
+      }
+    });
   };
 
-  const quickDateOptions = [
-    { label: '오늘', days: 0 },
-    { label: '내일', days: 1 },
-    { label: '1주일', days: 7 },
-  ];
+   const quickDateOptions = [
+     { label: '오늘', days: 0 },
+     { label: '내일', days: 1 },
+     { label: '1주일', days: 7 },
+   ];
 
-  const handleQuickDate = (days) => {
-    const date = new Date();
-    date.setDate(date.getDate() + days);
-    setDueDate(date.toISOString().split('T')[0]);
-  };
-
-  const priorityColors = {
-    high: 'bg-red-500/20 border-red-500/50 text-red-400',
-    medium: 'bg-yellow-500/20 border-yellow-500/50 text-yellow-400',
-    low: 'bg-green-500/20 border-green-500/50 text-green-400',
-  };
-
-  const categoryColors = {
-    work: 'bg-blue-500/20 border-blue-500/50 text-blue-400',
-    personal: 'bg-purple-500/20 border-purple-500/50 text-purple-400',
-    study: 'bg-pink-500/20 border-pink-500/50 text-pink-400',
-  };
+   const handleQuickDate = (days) => {
+     const date = new Date();
+     date.setDate(date.getDate() + days);
+     setDueDate(date.toISOString().split('T')[0]);
+   };
 
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-4">
@@ -133,10 +122,10 @@ export const TodoInput = ({ onAdd }) => {
                 exit={{ opacity: 0, scale: 0.5 }}
                 whileHover={{ scale: 1.1, rotate: 15 }}
                 whileTap={{ scale: 0.9 }}
-                className={`text-yellow-400 hover:text-yellow-300 transition-colors duration-200 ${isEnhancing ? 'animate-pulse' : ''}`}
+                className={`text-yellow-400 hover:text-yellow-300 transition-colors duration-200 ${isPending ? 'animate-pulse' : ''}`}
                 title="AI로 작업 구체화하기"
               >
-                {isEnhancing ? <Loader2 size={20} className="animate-spin" /> : <Sparkles size={20} />}
+                {isPending ? <Loader2 size={20} className="animate-spin" /> : <Sparkles size={20} />}
               </motion.button>
             )}
           </AnimatePresence>

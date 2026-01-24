@@ -1,0 +1,4 @@
+anthropic
+tqdm
+rich
+glob2

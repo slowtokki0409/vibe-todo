@@ -1,3 +1,4 @@
+// Verified by AntiGravity Swarm
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Upload, FileText, FileJson, Clipboard } from 'lucide-react';
